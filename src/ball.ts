@@ -7,6 +7,8 @@ export class Ball {
   private speedY: number;
   private radius: number;
   private canvas: HTMLCanvasElement;
+  private baseSpeed: number = 4;
+  private speedMultiplier: number = 1.05;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -21,11 +23,23 @@ export class Ball {
     return Math.random() * 4 - 2;
   }
 
+  private increaseSpeed(): void {
+    this.speedX *= this.speedMultiplier;
+    this.speedY *= this.speedMultiplier;
+  }
+
+  private isCollidingWithPaddle(paddle: Paddle): boolean {
+    return (
+      this.y + this.radius >= paddle.y &&
+      this.y - this.radius <= paddle.y + paddle.height
+    );
+  }
+
   reset(): void {
     this.x = this.canvas.width / 2;
     this.y = this.canvas.height / 2;
-    this.speedX = 3;
-    this.speedY = Math.random() * 4 - 2;
+    this.speedX = this.baseSpeed * (Math.random() < 0.5 ? -1 : 1);
+    this.speedY = this.baseSpeed * (Math.random() * 2 - 1);
   }
 
   update(playerPaddle: Paddle, computerPaddle: Paddle): void {
@@ -39,14 +53,24 @@ export class Ball {
 
     // Collision with paddles
     if (
-      (this.x - this.radius < playerPaddle.x + playerPaddle.width &&
-        this.y > playerPaddle.y &&
-        this.y < playerPaddle.y + playerPaddle.height) ||
-      (this.x + this.radius > computerPaddle.x &&
-        this.y > computerPaddle.y &&
-        this.y < computerPaddle.y + computerPaddle.height)
+      (this.x - this.radius <= playerPaddle.x + playerPaddle.width &&
+        this.isCollidingWithPaddle(playerPaddle)) ||
+      (this.x + this.radius >= computerPaddle.x &&
+        this.isCollidingWithPaddle(computerPaddle))
     ) {
       this.speedX = -this.speedX;
+      this.increaseSpeed();
+
+      // Calculate the angle based on where the ball hits the paddle
+      const paddle = this.speedX > 0 ? computerPaddle : playerPaddle;
+      const hitPosition = (this.y - paddle.y) / paddle.height - 0.5;
+      const angle = (hitPosition * Math.PI) / 3; // The range of the angle is between -60 and 60 degrees
+
+      // Update the ball's speedY based on the angle
+      const speedMagnitude = Math.sqrt(
+        this.speedX * this.speedX + this.speedY * this.speedY
+      );
+      this.speedY = speedMagnitude * Math.sin(angle);
     }
 
     // Scoring
