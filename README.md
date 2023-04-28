@@ -1,4 +1,4 @@
-# Pong
+# PonGPT
 
 Pong is a classic arcade game where players control paddles to hit a ball back and forth across a screen.
 
