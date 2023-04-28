@@ -7,6 +7,14 @@ body {
   background-color: black;
 }
 
+h1 {
+  text-align: center;
+  font-size: 40px;
+  font-family: "Courier New", Courier, monospace;
+  color: white;
+  margin-top: 20px;
+}
+
 canvas {
   display: block;
   margin: auto;
