@@ -106,5 +106,24 @@ export class Game {
         this.playerPaddle.stopMoving();
       }
     });
+
+    // Touch controls for iPhone
+    let startY: number;
+    window.addEventListener("touchstart", (event) => {
+      startY = event.touches[0].clientY;
+    });
+    window.addEventListener("touchmove", (event) => {
+      event.preventDefault();
+      const currentY = event.touches[0].clientY;
+      if (currentY < startY) {
+        this.playerPaddle.moveUp();
+      } else if (currentY > startY) {
+        this.playerPaddle.moveDown();
+      }
+      startY = currentY;
+    });
+    window.addEventListener("touchend", () => {
+      this.playerPaddle.stopMoving();
+    });
   }
 }
