@@ -5,7 +5,8 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
-    "start": "tsc && lite-server --baseDir=dist",
+    "dev": "tsc -w & lite-server --baseDir=dist",
+    "start": "lite-server --baseDir=dist",
     "go": "lite-server --baseDir=dist"
   },
   "dependencies": {},
