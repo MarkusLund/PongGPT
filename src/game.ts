@@ -94,6 +94,11 @@ export class Game {
 
   private registerEventListeners(): void {
     window.addEventListener("keydown", (event: KeyboardEvent) => {
+      // Prevent default behavior of arrow keys to scroll the page
+      if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+        event.preventDefault();
+      }
+
       if (event.key === "ArrowUp") {
         this.playerPaddle.moveUp();
       } else if (event.key === "ArrowDown") {
@@ -102,6 +107,11 @@ export class Game {
     });
 
     window.addEventListener("keyup", (event: KeyboardEvent) => {
+      // Prevent default behavior of arrow keys to scroll the page
+      if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+        event.preventDefault();
+      }
+
       if (event.key === "ArrowUp" || event.key === "ArrowDown") {
         this.playerPaddle.stopMoving();
       }
